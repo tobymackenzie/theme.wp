@@ -1,0 +1,131 @@
+/*
+Theme Name: Bare Wordpress
+Description: Theme developed by Toby Mackenzie as a bare theme to help create less bare themes.
+Author: Toby Mackenzie
+AuthorURI: http://tobymackenzie.com
+
+This theme is designed and owned by Toby Mackenzie.  Contact him if you'd like to use it.
+
+*/
+/* colors
+-bg
+
+-text
+green	success
+red		error
+
+*/
+
+/* fonts */
+
+/* standard elements */
+body{
+	margin: 0;
+	padding: 0;
+	background: yellow;
+}
+body, th, td{
+	font-size: 12px;
+	line-height: 1.4;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+h1,h2,h3,h4,h5,h6{
+	margin: 0 0 15px 0;
+	padding: 0;
+	font-weight: normal;
+}
+p{
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+a{
+	margin: 0;
+}
+a:hover{
+}
+img{
+	border: none;
+}
+table{
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table, tr, td{
+	margin: 0;
+	padding: 0;
+}
+header, section, footer, aside, nav, article, figure {
+	display: block;
+}
+
+/* reusable classes */
+.screenreaderonly, #jumpnavigation a{
+	position: absolute;
+	left: -9000px;
+}
+.floatleft{
+	float: left;
+}
+.floatright{
+	float: right;
+}
+.clearboth{
+	clear: both;
+}
+.message{
+	font-weight: bold;
+	padding-bottom: 15px;
+}
+.error{
+	color: red;
+}
+.success{
+	color: green;
+}
+
+/* pagewrap */
+#pagewrap{
+	margin: auto;
+	width: 900px;
+	background: red;
+}
+
+/* header */
+#pagewrap>header{
+	background: #f66;
+}
+#jumpnavigation{
+	position: absolute;
+}
+#jumpnavigation a:hover, #jumpnavigation a:active, #jumpnavigation a:focus{
+	position: relative;
+	left: 0;
+}
+#logo{
+}
+/* mainwrap */
+#mainwrap{
+}
+
+/* maincontent */
+#maincontent{
+	float: right;
+	width: 650px;
+	background: white;
+}
+
+/* sidebar */
+#sidebar{
+	float: left;
+	width: 250px;
+	background: #6f6;
+}
+
+/* footer */
+#pagewrap>footer{
+	background: #66f;
+}
+
+/*
+internal page pieces
+*/
