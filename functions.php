@@ -1,111 +1,123 @@
 <?php
-/*
-*/
+use TJM\WPThemeHelper\SettingHelper;
+use TJM\WPThemeHelper\WPThemeHelper;
 
-// register two sidebars for widgetizing
-if(function_exists('register_sidebar')){
-	register_sidebars(2, array(
-		'before_widget' => '<div id="%1$s" class="widget %2$s">',
-		'after_widget' => '</div>',
-		'before_title' => '<h2>',
-		'after_title' => '</h2>',
+require_once(__DIR__ . '/vendor/autoload.php');
+
+/*=====
+Sets up the class that manages theme functionality not built into WordPress.
+=====*/
+
+//--Create instance of helper if not created already by child class.  Set in child class to override functionality.  Set to array in child class to provide base options.
+//---make following logic easier
+if(!isset($tjmThemeHelper)){
+	$tjmThemeHelper = Array();
+}
+//---set some default settings for rendering callbacks
+if(is_array($tjmThemeHelper) && !(isset($tjmThemeHelper['settings']) && is_object($tjmThemeHelper['settings']))){
+	$tjmThemeHelper['settings'] = new SettingHelper(Array(
+		'overrideDefaults'=> false
+		,'settings'=> SettingHelper::buildSettingsArray(
+			SettingHelper::getBaseDefaults()
+			// ,Array(
+			// 	'i18n'=> array(
+			// 		'dir'=> 'languages'
+			// 		,'domain'=> 'tjmbase'
+			// 	)
+			// )
+			,(isset($tjmThemeHelper['settings'])) ? $tjmThemeHelper['settings'] : null
+			//--create callbacks to use our templates for certain custom theme abilities.  These can't be defined in 'settings.json'
+			,function($settings, $args){
+				if(isset($settings['custom-background'])){
+					$settings['custom-background'] = array_merge(Array(
+						'wp-head-callback'=> function(){
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('customBackgroundStyles');
+						}
+					), $settings['custom-background']);
+				}
+				if(isset($settings['custom-header'])){
+					$settings['custom-header'] = array_merge(Array(
+						'admin-head-callback'=> function(){
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderStyles');
+						}
+						,'admin-preview-callback'=> function(){
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderContent');
+						}
+						,'wp-head-callback'=> function(){
+							$textColor = get_header_textcolor();
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderStyles', Array(
+								'textColor'=> $textColor
+							));
+						}
+					), $settings['custom-header']);
+				}
+			}
+		)
 	));
 }
 
-// select template for single posts by category slug, default to regular single.php
-/*add_filter('single_template', create_function('$t', 
-	'foreach( (array) get_the_category() as $fncCategory ) { 
-		if ( file_exists(TEMPLATEPATH . "/single-{$fncCategory->slug}.php") ) 
-			return TEMPLATEPATH . "/single-{$fncCategory->slug}.php"; 
-	} 
-	return $t;
-' ));*/
+//---instantiate WPThemeHelper
+if(!is_object($tjmThemeHelper)){
+	$tjmThemeHelper = new WPThemeHelper($tjmThemeHelper);
+}
 
-// add variables to allowable for searches for custom fields searches
-/*$wp->add_query_var('meta_key');
-$wp->add_query_var('meta_value');
-$wp->add_query_var('meta_compare');
+/*=====
+==template shortcodes / functions
+=====*/
+/*
+Function: tjmGetPostType
+Get the type of post, so we can switch on it in templates.
+
+-# should put somewhere that isn't global
 */
+function tjmGetPostType(){
+	if(is_page()){
+		$type = 'page';
+	}elseif(is_single()){
+		$type = 'single';
+	}else{
+		$type = 'other';
+	}
+	return $type;
+};
 
+/*=====
+==template shortcodes / functions
+=====*/
+$tjmThemeHelper->shortcodes->add(Array(
+	/*
+	Shortcode: comment
+	Allow adding comments to posts that won't get rendered to output.
+	*/
+	'comment'=> function($attr, $content = null){
+		return "";
+	}
+	/*
+	Shortcode: internalLink
+	Convenience shortcode for adding internal links.  Automatically adds html wrapper and beginning slash.
+	*/
+	,'internalLink'=> function($attr, $content = null){
+		// set up variables
+		$internalPath = ($attr['path']) ? $attr['path']: '/';
+		if(substr($internalPath,0,1) !== "/"){
+			$internalPath = "/".$internalPath;
+		}
+		if(substr($internalPath,-1,1) !== "/"
+			&& strpos($attr['path'], ".") == false
+			&& strpos($attr['path'], "#") == false
+			&& strpos($attr['path'], "?") == false
+		){
+			$internalPath .= "/";
+		}
+		$classes = ($attr['class']) ? $attr['class'] : null;
 
-/* ************
-functions and shortcodes for templates
-************** */
+		$output = '';
+		$output .= "<a href=\"".get_bloginfo('url')."{$internalPath}\"";
+		if($classes !== null){
+			$output .= " class=\"{$classes}\"";
+		}
+		$output .= ">{$content}</a>";
 
-
-/* **** determine section **** */
-/*function fncsIsSection($argName){
-	global $post;
-	switch($argName):
-		case 'home':
-			return (is_front_page()) ? true : false;
-		case 'about-us':
-			return (is_page('about-us')) ? true : false;
-		case 'international':
-			return (is_page('international')) ? true : false;
-		case 'teams':
-			return (is_page('teams')
-				|| fncsHasParent(19)
-			) ? true : false;
-		case 'footskills':
-			return (is_page('footskills')) ? true : false;
-		case 'news':
-			return (is_page('news')
-				|| (is_single() && in_category('news'))
-				|| is_category('news')
-			) ? true : false;
-		case 'contact':
-			return (is_page('contact')) ? true : false;
-	endswitch;
-}*/
-
-
-/* **** hasParent **** */
-// based on instructions from http://codex.wordpress.org/Conditional_Tags
-/*function fncsHasParent($argParentID){
-	global $post;
-	
-	if(is_page($argParentID)) return true;
-	
-	$fncAncestors = get_post_ancestors($post->ID);
-	foreach($fncAncestors as $forAncestor)
-		if(is_page() && $forAncestor == $argParentID) return true;
-	
-	return false;
-}*/
-
-
-/* **** internalLink **** */
-/*add_shortcode('internalLink', 'fncsInternalLink');
-function fncsInternalLink($argArray, $argContent=null){
-	// set up variables
-	$fncInternalPath = ($argArray['path'])?$argArray['path']: '/';
-		if(substr($fncInternalPath,0,1) != "/")
-			$fncInternalPath = "/".$fncInternalPath;
-		if(substr($fncInternalPath,-1,1) != "/" 
-				&& strpos($argArray['path'], ".") == false 
-				&& strpos($argArray['path'], "#") == false 
-				&& strpos($argArray['path'], "?") == false
-			)
-			$fncInternalPath .= "/";
-	$fncAddClasses = ($argArray['add_classes'])?$argArray['add_classes']: null;
-	$fncReturn = '';
-	
-	$fncReturn .= "<a href=\"".get_bloginfo('url')."{$fncInternalPath}\"";
-	if($fncAddClasses != null)
-		$fncReturn .= " class=\"{$fncAddClasses}\"";
-	$fncReturn .= ">{$argContent}</a>";
-
-	return do_shortcode($fncReturn);
-}*/
-
-
-/* **** hide ***** */
-// hide shortcode to comment out pieces
-/*add_shortcode('hide', 'fncsHide');
-function fncsHide($argArray, $argContent=null){
-	return "";
-}*/
-
-
-?>
+		return do_shortcode($output);
+	}
+));

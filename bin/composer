@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+//--install composer if not installed
+$whichComposerResult = shell_exec("which composer");
+$haveGlobalComposer = (empty($whichComposerResult)) ? false : true;
+$localComposer = __DIR__ . '/composer.phar';
+if(!$haveGlobalComposer){
+	$haveLocalComposer = file_exists($localComposer);
+}
+$haveComposer = $haveGlobalComposer || $haveLocalComposer;
+if(!$haveComposer){
+	exec(__DIR__ . '/installComposer ' . __DIR__);
+}
+
+//--gather arguments
+$arguments = '';
+for($i = 1; $i < $argc; ++$i){
+	$arguments .= " {$argv[$i]}";
+}
+
+//--run composer with arguments
+$composerCommand = ($haveGlobalComposer) ? 'composer' : 'php ' . $localComposer;
+passthru($composerCommand . $arguments);

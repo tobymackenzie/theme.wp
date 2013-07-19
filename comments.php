@@ -1,93 +1,105 @@
 <?php
-/*
-*/
-if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
-	die ('You cannot load this page directly.');
+/*=====
+Piece template: Renders the comments area.  Uses 'pieces/comment.php' to render individual comments.
+=====*/
 
-if ( post_password_required() ){ 
+if(!isset($tjmThemeHelper)) $tjmThemeHelper = $GLOBALS['tjmThemeHelper'];
+
+//=====debug
+if(WP_DEBUG){
 ?>
-		<p>This post is password protected. Enter the password to view comments.</p>
+<!--Debug:
+	@Template TJMBase/comments.php
+-->
 <?php
-	return;
 }
-?>
-		<section class="comments">
-<?php 
-if ( have_comments() ){
-?>
-			<h1>Comments</h1>
-			<p id="commentCount"><?php comments_number('No Responses', 'One Response', '% Responses' );?> to &#8220;<?php the_title(); ?>&#8221;</p>
-	
-			<ul class="commentlist">
-				<?php wp_list_comments(); ?>
-<?php 
-	// custom item output
-	/*foreach ($comments as $comment){ 
-?>
-				<li id="comment-<?php comment_ID() ?>">
-					<cite><?php comment_author_link() ?> on <a href="#comment-<?php comment_ID() ?>"><?php comment_date('F jS, Y') ?> at <?php comment_time() ?> </a></cite>
-					<?php edit_comment_link('edit','<div>','</div>'); ?>
-<?php 	if ($comment->comment_approved == '0'){ ?>
-					<strong>Your comment is awaiting moderation.</strong>
-<?php 	} ?>
-					<div class="quote"><?php comment_text() ?></div>
-				</li>
-<?php 
-	}*/
-?>
-			</ul>
-	
-			<nav class="relativenavigation">
-				<div class="previous"><?php previous_comments_link() ?></div>
-				<div class="next"><?php next_comments_link() ?></div>
-			</nav>
-<?php 
-} 
 
-if( comments_open() ){ 
+//=====content
 ?>
-			<div id="commentResponse">
-				<div><?php comment_form_title( 'Leave a Reply', 'Leave a Reply to %s' ); ?></div>
-				<div class="cancel-comment-reply">
-					<?php cancel_comment_reply_link(); ?>
-				</div>
-<?php if( get_option('comment_registration') && !is_user_logged_in() ){ ?>
-				<p>You must be <a href="<?php echo wp_login_url( get_permalink() ); ?>">logged in</a> to post a comment.</p>
-<?php }else{ ?>
-				<form id="commentform" action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post">
-<?php 	if( is_user_logged_in() ){ ?>
-					<div>Logged in as <a href="<?php echo get_option('siteurl'); ?>/wp-admin/profile.php"><?php echo $user_identity; ?></a>. <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="Log out of this account">Log out &raquo;</a></div>
-<?php 	}else{ ?>
-					<div>
-						<label for="author">Name <?php if ($req) echo "(required)"; ?></label>
-						<input type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" size="22" <?php if ($req) echo "aria-required='true'"; ?> />
-					</div>
-					<div>
-						<label for="email">Mail (will not be published) <?php if ($req) echo "(required)"; ?></label>
-						<input type="email" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" size="22" <?php if ($req) echo "aria-required='true'"; ?> />
-					</div>
-					<div>
-						<label for="url"><small>Website</small></label>
-						<input type="url" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" size="22" />
-					</div>
-<?php 	} ?>
-<!--<p><small><strong>XHTML:</strong> You can use these tags: <code><?php echo allowed_tags(); ?></code></small></p>-->
-					<div>
-						<label for="comment">Comment</label>
-						<textarea id="commentContent" name="comment" cols="58" rows="10"></textarea></div>
-					<div>
-						<input name="submit" type="submit" id="submit" value="Submit Comment" />
-						<?php comment_id_fields(); ?>
-					</div>
-<?php do_action('comment_form', $post->ID); ?>
-				</form>
-<?php } ?>
-			</div>
+<section class="comments" id="comments">
+<?php
+//--if the post is requires authentication and the visitor hasn't provided it, display message instead of comments
+if(post_password_required()){
+?>
+	<p class="notice"><?php _e('This post requires authentication.  Please enter the password to view comments.', 'tjmbase'); ?></p>
 <?php
 }else{
+	if(have_comments()){
 ?>
-			<span class="commentsClosed">Comments are closed.</span>
-<?php 
+	<header class="commentsHeader">
+		<h2 class="commentsHeading"><?php _e('Responses', 'tjmbase'); ?></h2>
+		<div class="commentsCount"><?php echo
+			__('Count:', 'tjmbase') . ' '
+			. number_format_i18n(get_comments_number())
+		?></div>
+	</header>
+<?php
+		if(!empty($comments_by_type['comment'])){
+?>
+	<div class="commentsListWrap">
+		<h3 class="commentListHeading">Comments</h3>
+		<ol class="commentsList">
+			<?php
+			//--render each comment through tjmThemeHelper->outputCommentPiece().  This function renders and outputs 'pieces/comment.php'.  Create this file in a child theme to override
+			wp_list_comments(array('style'=> 'ol', 'type'=> 'comment', 'callback'=> function($comment, $args, $depth) use($tjmThemeHelper){
+				echo $tjmThemeHelper->renderer->renderPiece('comment', Array(
+					'args'=> $args
+					,'comment'=> $comment
+					,'depth'=> $depth
+				));
+			}));
+			?>
+		</ol>
+	</div>
+<?php
+		}
+		if(!empty($comments_by_type['pings'])){
+?>
+	<div class="commentsListWrap">
+		<h3 class="commentListHeading">Trackbacks</h3>
+		<ol class="commentsList">
+			<?php
+			//--render each comment through tjmThemeHelper->outputCommentPiece().  This function renders and outputs 'pieces/comment.php'.  Create this file in a child theme to override
+			wp_list_comments(array('style'=> 'ol', 'type'=> 'pings', 'callback'=> function($comment, $args, $depth) use($tjmThemeHelper){
+				echo $tjmThemeHelper->renderer->renderPiece('comment', Array(
+					'args'=> $args
+					,'comment'=> $comment
+					,'depth'=> $depth
+				));
+			}));
+			?>
+		</ol>
+	</div>
+<?php
+		}
+
+		//--output comments navigation if there are multiple comments pages
+		if(get_comment_pages_count() > 1 && get_option('page_comments')){
+			$tjmThemeHelper->renderer->renderPiece('relativeNav', Array(
+				'classes'=> 'commentRelNav'
+				,'id'=> 'comment-nav-below'
+				,'nextLink'=> get_next_comments_link(__('Newer Comments', 'tjmbase'))
+				,'prevLink'=> get_previous_comments_link(__('Older Comments', 'tjmbase'))
+				,'title'=> __('Comment navigation', 'tjmbase')
+			));
+		}
+	}
+?>
+	<footer class="commentsFooter">
+<?php
+	//--output message if comments are closed but page has comments
+	if(!comments_open() && get_comments_number()){
+?>
+		<p class="notice"><?php _e('Comments are now closed on this post.', 'tjmbase'); ?></p>
+<?php
+
+	//--otherwise, display comment form using the WordPress built in form template
+	}else{
+		comment_form(Array('title_reply'=> 'Leave a comment'));
+	}
+?>
+	</footer>
+<?php
 }
 ?>
-		</section>
+</section>

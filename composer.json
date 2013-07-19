@@ -1,0 +1,16 @@
+{
+	"name": "tjm/wpbasetheme"
+	,"description": "WordPress theme to use as parent theme for easy theme development"
+	,"authors": [
+		{
+			"name": "Toby Mackenzie"
+			,"email": "public@tobymackenzie.com"
+			,"homepage": "http://www.tobymackenzie.com"
+		}
+	]
+	,"minimum-stability": "dev"
+	,"require": {
+		"php": ">=5.3.3"
+		,"tjm/wpthemehelper": "master@dev"
+	}
+}

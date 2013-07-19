@@ -1,33 +1,30 @@
 <?php
-/*
-*/
+/*=====
+Piece template: Renders both sidebar widget areas if enabled
+=====*/
 
-?>
-		</div><!-- maincontent -->
-		<aside id="sidebar" class="sidebar" role="complementary">
-			<h1 class="screenreaderonly">Sidebar</h1>
-<?php 
-if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar(1) ) : 
-?>
-			<?php get_search_form(); ?>
-			<nav class="pages" role="navigation">
-				<h1>Pages</h1>
-				<ul><?php wp_list_pages('title_li='); ?></ul>
-			</nav><!-- pages -->
-<?php
-endif;
-?>
-			<?php wp_meta(); ?>	
-		</aside><!-- sidebar1 -->
+global $tjmThemeHelper;
 
-<?php
-if(function_exists('dynamic_sidebar') && is_dynamic_sidebar(2)):
+$tjmThemeHelper->buffers->start('aside');
+
+//=====debug
+if(WP_DEBUG){
 ?>
-		<aside id="sidebar2" class="sidebar" role="complementary">
-			<?php dynamic_sidebar(2); ?>
-		</aside><!-- sidebar2 -->
+<!--Debug
+	@Template TJMBase/sidebar.php
+-->
 <?php
-endif;
+}
+
+//=====content
+if(is_active_sidebar('aside-1')){
 ?>
-		<div class="clearboth"></div>
-	</div><!-- mainwrap -->
+<aside class="widgetArea aside1 aside" role="complementary"><?php dynamic_sidebar('aside-1'); ?></aside>
+<?php
+}
+if(is_active_sidebar('aside-2')){
+?>
+<aside class="widgetArea aside2 aside" role="complementary"><?php dynamic_sidebar('aside-2'); ?></aside>
+<?php
+}
+$tjmThemeHelper->buffers->end('aside');

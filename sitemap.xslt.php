@@ -1,11 +1,18 @@
 <?php
-header("Content-type: application/xml;charset={bloginfo('charset')}");
-define('pagIsXSLT', true);
-require_once("../../../wp-load.php");
+header("Content-type: application/xml;charset=" . bloginfo('charset'));
+
+$isXSLT = true;
+
+if(!defined('ABSPATH')){
+	define('ABSPATH', realpath(__DIR__ . '../../..'));
+}
+
+require_once(ABSPATH . "/wp-load.php");
+
 /*
 requires this condition around doctype in header file
-<?php if(!defined('pagIsXSLT')): ?>
-<?php endif; ?>
+<?php if(!(isset($isXSLT) && $isXSLT)){ ?>
+<?php } ?>
 */
 ?>
 <<?php echo "?"; ?>xml version="1.0"?>
