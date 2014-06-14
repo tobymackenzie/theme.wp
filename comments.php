@@ -15,16 +15,17 @@ if(WP_DEBUG){
 }
 
 //=====content
+if(comments_open() || get_comments_number()){
 ?>
 <section class="comments" id="comments">
 <?php
-//--if the post is requires authentication and the visitor hasn't provided it, display message instead of comments
-if(post_password_required()){
+	//--if the post is requires authentication and the visitor hasn't provided it, display message instead of comments
+	if(post_password_required()){
 ?>
 	<p class="notice"><?php _e('This post requires authentication.  Please enter the password to view comments.', 'tjmbase'); ?></p>
 <?php
-}else{
-	if(have_comments()){
+	}else{
+		if(have_comments()){
 ?>
 	<header class="commentsHeader">
 		<h2 class="commentsHeading"><?php _e('Responses', 'tjmbase'); ?></h2>
@@ -34,7 +35,7 @@ if(post_password_required()){
 		?></div>
 	</header>
 <?php
-		if(!empty($comments_by_type['comment'])){
+			if(!empty($comments_by_type['comment'])){
 ?>
 	<div class="commentsListWrap">
 		<h3 class="commentListHeading">Comments</h3>
@@ -52,8 +53,8 @@ if(post_password_required()){
 		</ol>
 	</div>
 <?php
-		}
-		if(!empty($comments_by_type['pings'])){
+			}
+			if(!empty($comments_by_type['pings'])){
 ?>
 	<div class="commentsListWrap">
 		<h3 class="commentListHeading">Trackbacks</h3>
@@ -71,35 +72,37 @@ if(post_password_required()){
 		</ol>
 	</div>
 <?php
-		}
+			}
 
-		//--output comments navigation if there are multiple comments pages
-		if(get_comment_pages_count() > 1 && get_option('page_comments')){
-			$tjmThemeHelper->renderer->renderPiece('relativeNav', Array(
-				'classes'=> 'commentRelNav'
-				,'id'=> 'comment-nav-below'
-				,'nextLink'=> get_next_comments_link(__('Newer Comments', 'tjmbase'))
-				,'prevLink'=> get_previous_comments_link(__('Older Comments', 'tjmbase'))
-				,'title'=> __('Comment navigation', 'tjmbase')
-			));
+			//--output comments navigation if there are multiple comments pages
+			if(get_comment_pages_count() > 1 && get_option('page_comments')){
+				$tjmThemeHelper->renderer->renderPiece('relativeNav', Array(
+					'classes'=> 'commentRelNav'
+					,'id'=> 'comment-nav-below'
+					,'nextLink'=> get_next_comments_link(__('Newer Comments', 'tjmbase'))
+					,'prevLink'=> get_previous_comments_link(__('Older Comments', 'tjmbase'))
+					,'title'=> __('Comment navigation', 'tjmbase')
+				));
+			}
 		}
-	}
 ?>
 	<footer class="commentsFooter">
 <?php
-	//--output message if comments are closed but page has comments
-	if(!comments_open() && get_comments_number()){
+		//--output message if comments are closed but page has comments
+		if(!comments_open() && get_comments_number()){
 ?>
 		<p class="notice"><?php _e('Comments are now closed on this post.', 'tjmbase'); ?></p>
 <?php
 
-	//--otherwise, display comment form using the WordPress built in form template
-	}else{
-		comment_form(Array('title_reply'=> 'Leave a comment'));
-	}
+		//--otherwise, display comment form using the WordPress built in form template
+		}else{
+			comment_form(Array('title_reply'=> 'Leave a comment'));
+		}
 ?>
 	</footer>
 <?php
-}
+	}
 ?>
 </section>
+<?php
+}
