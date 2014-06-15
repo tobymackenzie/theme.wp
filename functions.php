@@ -2,7 +2,10 @@
 use TJM\WPThemeHelper\SettingHelper;
 use TJM\WPThemeHelper\WPThemeHelper;
 
-require_once(__DIR__ . '/vendor/autoload.php');
+//--load composer autoloader if not already loaded.  This allows a project to load this project as a composer module.
+if(!class_exists('\Composer\Autoload\ClassLoader')){
+	require_once(__DIR__ . '/vendor/autoload.php');
+}
 
 /*=====
 Sets up the class that manages theme functionality not built into WordPress.
