@@ -44,7 +44,7 @@ if(is_array($tjmThemeHelper) && !(isset($tjmThemeHelper['settings']) && is_objec
 							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderStyles');
 						}
 						,'admin-preview-callback'=> function(){
-							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderContent');
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('skeleton/headerContent');
 						}
 						,'wp-head-callback'=> function(){
 							$textColor = get_header_textcolor();

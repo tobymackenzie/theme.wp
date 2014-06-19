@@ -7,7 +7,8 @@ The skeleton loader for all normal pages.  Loads 'skeleton.html.php' for regular
 =====*/
 
 //==shared data
-$pageTitle = wp_title('-', false, 'right') . get_bloginfo('name');
+
+$tjmThemeHelper->data->set('pageTitle', wp_title('-', false, 'right') . get_bloginfo('name'));
 
 //==load required skeleton
 if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'){
