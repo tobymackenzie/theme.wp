@@ -41,7 +41,7 @@ if(comments_open() || get_comments_number()){
 		<h3 class="commentListHeading">Comments</h3>
 		<ol class="commentsList">
 			<?php
-			//--render each comment through tjmThemeHelper->outputCommentPiece().  This function renders and outputs 'pieces/comment.php'.  Create this file in a child theme to override
+			//--render each comment from 'pieces/comments.php'.  Create this file in a child theme to override
 			wp_list_comments(array('style'=> 'ol', 'type'=> 'comment', 'callback'=> function($comment, $args, $depth) use($tjmThemeHelper){
 				echo $tjmThemeHelper->renderer->renderPiece('comment', Array(
 					'args'=> $args
