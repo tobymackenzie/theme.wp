@@ -8,15 +8,15 @@ if(!(isset($isXSLT) && $isXSLT)){
 ?>
 <!DOCTYPE html>
 <?php } ?>
-<html <?php body_class('html ua-no-js'); ?> <?php language_attributes(); ?>>
+<html <?php body_class('doc ua-no-js'); ?> <?php language_attributes(); ?>>
 	<head>
 		<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/meta'); ?>
 		<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/styles'); ?>
-		<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/headScripts'); ?>
+		<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/preScripts'); ?>
 		<?php wp_head(); ?>
 	</head>
 	<body <?php body_class('body'); ?> id="body">
-		<div class="sitePageWrap hfeed site">
+		<div class="docBody hfeed site">
 			<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/header'); ?>
 			<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/contentWrap'); ?>
 			<?php echo $tjmThemeHelper->renderer->renderPiece('skeleton/footer'); ?>

@@ -1,8 +1,8 @@
-<footer class="siteFooterWrap" role="contentinfo"><div class="siteFooter">
+<div class="docFooterWrap"><footer class="docFooter" role="contentinfo">
 <?php
 if(is_active_sidebar('footer-widget-area')){
 ?>
-	<div class="widgetArea footerWidgets">
+	<div class="widgetArea docFooterWidgets">
 		<?php dynamic_sidebar('footer-widget-area'); ?>
 	</div>
 <?php
@@ -14,12 +14,12 @@ if(has_nav_menu('footer')){
 		: _e("Additional Navigation", 'tjmbase')
 	;
 ?>
-	<nav class="siteFooterNavWrap" role="navigation"><div class="siteFooterNav">
-		<h3 class="siteFooterNavHeading"><?php echo $menuHeading; ?></h3>
+	<div class="docFooterNavWrap"><div class="docFooterNav" role="navigation">
+		<h3 class="docFooterNavHeading"><?php echo $menuHeading; ?></h3>
 		<?php wp_nav_menu(Array(
-			'menu_class'=> 'navList siteFooterNavList'
+			'menu_class'=> 'navList docFooterNavList'
 			,'theme_location'=> 'footer'
 		)); ?>
-	</div></nav>
+	</nav></div>
 <?php } ?>
-</div></footer>
+</footer></div>

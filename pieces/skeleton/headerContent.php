@@ -1,13 +1,13 @@
 <?php
 /*=====
-Piece template: Markup for site header.
+Piece template: Markup for doc header.
 =====*/
 
 //=====debug
 if(WP_DEBUG){
 ?>
 <!--Debug:
-	@Piece: TJMBase:siteHeaderContent
+	@Piece: TJMBase:headerContent
 -->
 <?php
 }
@@ -19,15 +19,15 @@ if(!isset($headerImage)){
 
 //=====content
 ?>
-<div class="siteHeaderContent">
-	<div class="siteLogo">
+<div class="docHeaderContent">
+	<div class="docLogo">
 <?php if(!is_front_page()){ ?>
-		<a class="siteLogoLink" href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+		<a class="docLogoAction" href="<?php echo esc_url(home_url('/')); ?>" rel="home">
 <?php
 }
 if(display_header_text() || empty($headerImage)){
 ?>
-			<span class="siteName"><?php bloginfo('name'); ?></span>
+			<span class="docSiteName"><?php bloginfo('name'); ?></span>
 <?php
 }
 if(!empty($headerImage)){
@@ -35,7 +35,7 @@ if(!empty($headerImage)){
 ?>
 			<img
 				alt="<?php if(!display_header_text()){ bloginfo('name'); } ?>"
-				class="siteHeaderImage"
+				class="docHeaderImage"
 				height="<?php echo get_custom_header()->height; ?>"
 				src="<?php echo esc_url($headerImage); ?>"
 				title="<?php echo esc_attr(get_bloginfo('name')); ?>"
@@ -49,6 +49,6 @@ if(!is_front_page()){
 <?php } ?>
 	</div>
 <?php if(display_header_text() && get_bloginfo('description')){ ?>
-	<div class="siteDescription"><?php bloginfo('description'); ?></div>
+	<div class="docSiteDescription"><?php bloginfo('description'); ?></div>
 <?php } ?>
 </div>

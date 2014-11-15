@@ -27,7 +27,7 @@ if(isset($type) && $type){
 			if($wp_query->max_num_pages < 2){
 				return;
 			}
-			$classes .= ' listRelativeNav';
+			$classes .= ' relNav-list';
 			if(!isset($title)){
 				$title = (is_search())
 					? __('Search navigation', 'tjmbase')
@@ -44,7 +44,7 @@ if(isset($type) && $type){
 		break;
 		case 'page':
 		case 'single':
-			$classes .= ' itemRelativeNav';
+			$classes .= ' relNav-item';
 			if(!isset($title)){
 				$title = __('Adjacent Posts', 'tjmbase');
 			}

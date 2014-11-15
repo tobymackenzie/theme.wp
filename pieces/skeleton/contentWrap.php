@@ -1,10 +1,10 @@
-<div class="siteContentWrap">
+<div class="docContent">
 <?php
 
 //--main with wrapper
 if($tjmThemeHelper->buffers->has('main')){
 ?>
-	<main class="siteMain" id="mainContent" role="main"><?php echo $tjmThemeHelper->buffers->get('main'); ?></main>
+	<div class="docMainWrap" id="docMain"><main class="docMain" role="main"><?php echo $tjmThemeHelper->buffers->get('main'); ?></main></div>
 <?php
 }
 

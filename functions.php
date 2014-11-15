@@ -41,14 +41,14 @@ if(is_array($tjmThemeHelper) && !(isset($tjmThemeHelper['settings']) && is_objec
 				if(isset($settings['custom-header'])){
 					$settings['custom-header'] = array_merge(Array(
 						'admin-head-callback'=> function(){
-							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderStyles');
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('docHeaderStyles');
 						}
 						,'admin-preview-callback'=> function(){
 							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('skeleton/headerContent');
 						}
 						,'wp-head-callback'=> function(){
 							$textColor = get_header_textcolor();
-							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('siteHeaderStyles', Array(
+							echo $GLOBALS['tjmThemeHelper']->renderer->renderPiece('docHeaderStyles', Array(
 								'textColor'=> $textColor
 							));
 						}
