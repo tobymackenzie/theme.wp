@@ -64,6 +64,28 @@ if(!is_object($tjmThemeHelper)){
 	$tjmThemeHelper = new WPThemeHelper($tjmThemeHelper);
 }
 
+
+/*=====
+==template data
+=====*/
+if(!$tjmThemeHelper->data->has('pageTitleSeparator', '-')){
+	$tjmThemeHelper->data->set('pageTitleSeparator', '-');
+}
+if(!$tjmThemeHelper->data->has('pageTitleLocation', 'right')){
+	$tjmThemeHelper->data->set('pageTitleLocation', 'right');
+}
+
+
+/*=====
+==template filters
+=====*/
+//--format title
+//-@ http://codex.wordpress.org/Function_Reference/wp_title#Customizing_with_the_filter
+add_filter('wp_title', function($title, $separator = '-', $display = false, $location = 'right') use($tjmThemeHelper){
+	$string = $tjmThemeHelper->renderer->renderPiece('skeleton/title', Array('display'=> $display, 'location'=> $location, 'separator'=> $separator, 'title'=> $title));
+	return $string;
+}, 10, 2);
+
 /*=====
 ==template shortcodes / functions
 =====*/
@@ -83,10 +105,6 @@ function tjmGetPostType(){
 	}
 	return $type;
 };
-
-/*=====
-==template shortcodes / functions
-=====*/
 $tjmThemeHelper->shortcodes->add(Array(
 	/*
 	Shortcode: comment
@@ -101,7 +119,7 @@ $tjmThemeHelper->shortcodes->add(Array(
 	*/
 	,'internalLink'=> function($attr, $content = null){
 		// set up variables
-		$internalPath = ($attr['path']) ? $attr['path']: '/';
+		$internalPath = (isset($attr['path'])) ? $attr['path']: '/';
 		if(substr($internalPath,0,1) !== "/"){
 			$internalPath = "/".$internalPath;
 		}
@@ -112,10 +130,10 @@ $tjmThemeHelper->shortcodes->add(Array(
 		){
 			$internalPath .= "/";
 		}
-		$classes = ($attr['class']) ? $attr['class'] : null;
+		$classes = (isset($attr['class'])) ? $attr['class'] : null;
 
 		$output = '';
-		$output .= "<a href=\"".get_bloginfo('url')."{$internalPath}\"";
+		$output .= "<a href=\"".home_url()."{$internalPath}\"";
 		if($classes !== null){
 			$output .= " class=\"{$classes}\"";
 		}
@@ -124,3 +142,34 @@ $tjmThemeHelper->shortcodes->add(Array(
 		return do_shortcode($output);
 	}
 ));
+
+/*=====
+==for theme check compliance
+=====*/
+//--enqueue comment scripts
+if(is_singular()){
+	wp_enqueue_script("comment-reply");
+}
+//--a bunch of stuff done by default by WPThemeHelper
+if(!isset($tjmThemeHelper)){
+	$tjmThemeHelper = Array(
+		'settings'=> SettingHelper::getBaseDefaults()
+	);
+}
+if(!is_object($tjmThemeHelper)){
+	add_theme_support('automatic-feed-links');
+	if(!isset($content_width)){
+		$content_width = $tjmThemeHelper['settings']['content-width'];
+	}
+	add_theme_support('custom-background', $tjmThemeHelper['settings']['custom-background']);
+	add_theme_support('custom-header', $tjmThemeHelper['settings']['custom-header']);
+	if($tjmThemeHelper['settings']['post-thumbnails']){
+		add_theme_support('post-thumbnails');
+	}
+	if($tjmThemeHelper['settings']['title-tag']){
+		add_theme_support('title-tag');
+	}
+	add_action('widgets_init', function() use($tjmThemeHelper){
+		register_sidebar($tjmThemeHelper['settings']['widget-areas']);
+	});
+}

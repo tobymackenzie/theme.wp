@@ -75,7 +75,7 @@ if(WP_DEBUG){
 	role="navigation"
 >
 <?php if(isset($title) && $title){ ?>
-	<h<? echo $level; ?> class="navHeading relNavHeading"><?php echo $title; ?></h<? echo $level; ?>>
+	<h<?php echo $level; ?> class="navHeading relNavHeading"><?php echo $title; ?></h<?php echo $level; ?>>
 <?php
 }
 if(isset($prevLink) && $prevLink){

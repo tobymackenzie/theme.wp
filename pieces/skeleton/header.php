@@ -16,7 +16,7 @@ if(has_nav_menu('header')){
 		: _e('Navigation Menu', 'tjmbase')
 	;
 ?>
-	<div class="docMainNavWrap"><div class="docMainNav" role="navigation">
+	<div class="docMainNavWrap"><nav class="docMainNav" role="navigation">
 		<h3 class="docMainNavHeading"><?php echo $menuHeading; ?></h3>
 		<?php wp_nav_menu(Array(
 			'menu_class'=> 'navList docMainNavList'
@@ -32,4 +32,4 @@ if(is_active_sidebar('header-widget-area')){
 <?php
 }
 ?>
-</div></header>
+</header></div>

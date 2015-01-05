@@ -9,6 +9,6 @@ The skeleton wrapper for all pages loaded via AJAX.  Returns only the title and 
 header("Content-type: application/json");
 
 echo json_encode(Array(
-	'title'=> $tjmThemeHelper->data->get('pageTitle')
+	'title'=> wp_title($tjmThemeHelper->data->get('pageTitleSeparator'), false, $tjmThemeHelper->data->get('pageTitleLocation'))
 	,'content'=> $tjmThemeHelper->buffers->get('main')
 ));

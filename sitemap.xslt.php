@@ -36,7 +36,7 @@ requires this condition around doctype in header file
 							<xsl:attribute name="href">
 								<xsl:value-of select="sitemap:loc"/>
 							</xsl:attribute>
-							<xsl:value-of select="substring(sitemap:loc, <?php echo strlen(get_bloginfo("url")) + 1; ?>)"/>
+							<xsl:value-of select="substring(sitemap:loc, <?php echo strlen(home_url()) + 1; ?>)"/>
 						</a></td>
 						<!--<td><xsl:value-of select="sitemap:priority"/></td>
 						<td><xsl:value-of select="sitemap:changefreq"/></td>-->

@@ -3,6 +3,8 @@
 Content template: Renders the main content area when no more specific content templates exist.  TJMBase uses this template for all content types (eg 'index', 'single', 'archive', 'page', and 'search') except 'none'.
 =====*/
 
+global $tjmThemeHelper;
+
 //=====debug
 if(WP_DEBUG){
 ?>
@@ -33,8 +35,9 @@ if(!is_page()){
 		<time class="entryTime" datetime="<?php the_time('Y-m-d G:i') ?>" pubdate="pubdate"><?php the_time('F jS, Y G:i') ?></time>
 <?php	if(is_sticky() && is_home() && ! is_paged()){ ?>
 		<div class="entryFeatured"><?php _e('Featured', 'tjmbase'); ?></div>
-<?php	} ?>
 <?php
+	}
+	echo $tjmThemeHelper->renderer->renderPiece('tags', Array('tags'=> get_the_tags()));
 }
 if(is_single() && comments_open()){
 ?>
@@ -44,7 +47,9 @@ if(is_single() && comments_open()){
 			,__('% Comments', 'tjmbase')
 			,'entryGoToCommentsAction'
 		); ?>
-<?php } ?>
+<?php
+}
+?>
 		<?php edit_post_link(__('Edit', 'tjmbase'), '<span class="editActionWrap">', '</span>'); ?>
 	</header>
 <?php

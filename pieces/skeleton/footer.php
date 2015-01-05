@@ -14,7 +14,7 @@ if(has_nav_menu('footer')){
 		: _e("Additional Navigation", 'tjmbase')
 	;
 ?>
-	<div class="docFooterNavWrap"><div class="docFooterNav" role="navigation">
+	<div class="docFooterNavWrap"><nav class="docFooterNav" role="navigation">
 		<h3 class="docFooterNavHeading"><?php echo $menuHeading; ?></h3>
 		<?php wp_nav_menu(Array(
 			'menu_class'=> 'navList docFooterNavList'
