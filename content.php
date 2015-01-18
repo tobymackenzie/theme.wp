@@ -16,23 +16,23 @@ if(WP_DEBUG){
 
 //=====content
 ?>
-<article <?php post_class("entry entry-default entry-" . get_the_ID()); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class("entry entry-default entry-" . get_the_ID() . " h-entry"); ?> id="post-<?php the_ID(); ?>">
 	<header class="entryHeader">
 		<?php the_post_thumbnail(); ?>
 <?php if(is_page() || is_single()){ ?>
-		<h1 class="entryHeading"><?php the_title(); ?></h1>
+		<h1 class="entryHeading p-name"><?php the_title(); ?></h1>
 <?php	if(is_single()){ ?>
-		<a class="entryPermalink permalink" href="<?php the_permalink(); ?>" title="<?php echo esc_attr(sprintf(__('Permalink to %s', 'tjmbase'), the_title_attribute(Array('echo'=> false)))); ?>" rel="bookmark"><?php _e('Permalink', 'tjmbase'); ?></a>
+		<a class="entryPermalink permalink u-url" href="<?php the_permalink(); ?>" title="<?php echo esc_attr(sprintf(__('Permalink to %s', 'tjmbase'), the_title_attribute(Array('echo'=> false)))); ?>" rel="bookmark"><?php _e('Permalink', 'tjmbase'); ?></a>
 <?php
 	}
 }else{
 ?>
-		<h1 class="entryHeading"><a class="entryHeadingAction" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h1>
+		<h1 class="entryHeading p-name"><a class="entryHeadingAction u-url" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h1>
 <?php
 }
 if(!is_page()){
 ?>
-		<time class="entryTime" datetime="<?php the_time('Y-m-d G:i') ?>" pubdate="pubdate"><?php the_time('F jS, Y G:i') ?></time>
+		<time class="dt-published entryTime" datetime="<?php the_time('Y-m-d G:i') ?>" pubdate="pubdate"><?php the_time('F jS, Y G:i') ?></time>
 <?php	if(is_sticky() && is_home() && ! is_paged()){ ?>
 		<div class="entryFeatured"><?php _e('Featured', 'tjmbase'); ?></div>
 <?php
@@ -57,9 +57,9 @@ if(is_single() && comments_open()){
 //--Output entry content.  Excerpt for search results, full content for everything else.
 if(is_search()){
 ?>
-	<div class="entrySummary"><?php the_excerpt(); ?></div>
+	<div class="entrySummary p-summary"><?php the_excerpt(); ?></div>
 <?php }else{ ?>
-	<div class="entryContent">
+	<div class="e-content entryContent">
 		<?php the_content(__('Continue reading', 'tjmbase')); ?>
 		<?php wp_link_pages(Array(
 			'after'=> '</div>'

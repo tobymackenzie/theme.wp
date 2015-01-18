@@ -8,7 +8,7 @@ if(isset($tags)){
 <?php
 		foreach($tags as $tag){
 ?>
-		<li class="entryTag"><a class="entryTagAction" href="<?php echo esc_url(get_tag_link($tag)); ?>" rel="tag"><?php echo $tag->name; ?></a></li>
+		<li class="entryTag"><a class="entryTagAction p-category" href="<?php echo esc_url(get_tag_link($tag)); ?>" rel="tag"><?php echo $tag->name; ?></a></li>
 <?php
 		}
 ?>

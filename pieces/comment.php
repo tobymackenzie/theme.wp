@@ -30,7 +30,7 @@ $commentType = ($comment->comment_type === 'pingback' || $comment->comment_type 
 //=====content
 ?>
 <<?php echo $containerTag; ?> <?php comment_class('commentWrap'); ?>>
-	<article class="comment comment-<?php echo $commentType; ?>" id="comment-<?php comment_ID(); ?>">
+	<article class="comment comment-<?php echo $commentType; ?> p-comment" id="comment-<?php comment_ID(); ?>">
 		<header class="commentHeader commentAuthor vcard<?php if($comment->user_id === $post->post_author){ ?> postAuthor<?php } ?>">
 			<span class="commentAuthorAvatar avatarWrap"><?php echo get_avatar($comment, 44); ?></span>
 			<cite class="commentAuthorName fn"><?php echo get_comment_author_link(); ?></cite>
