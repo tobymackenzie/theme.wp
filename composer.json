@@ -12,6 +12,6 @@
 	,"minimum-stability": "dev"
 	,"require": {
 		"php": ">=5.3.3"
-		,"tjm/wpthemehelper": "master@dev"
+		,"tjm/wpthemehelper": "^1"
 	}
 }
