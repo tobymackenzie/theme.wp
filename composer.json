@@ -9,7 +9,6 @@
 		}
 	]
 	,"license": "0BSD"
-	,"minimum-stability": "dev"
 	,"require": {
 		"php": ">=5.3.3"
 		,"tjm/wpthemehelper": "^1"
